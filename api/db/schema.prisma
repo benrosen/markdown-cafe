@@ -1,0 +1,24 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = "native"
+}
+
+model Page {
+  createdAt DateTime @default(now())
+  id        String   @id
+  markdown  String?
+  secret    String   @default(uuid())
+  updatedAt DateTime @updatedAt
+  flags     Flag[]
+}
+
+model Flag {
+  id     Int    @id @default(autoincrement())
+  page   Page   @relation(fields: [pageId], references: [id])
+  pageId String
+}
